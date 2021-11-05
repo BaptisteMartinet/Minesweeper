@@ -14,5 +14,16 @@ class MainActivity : AppCompatActivity() {
     resetBtn.setOnClickListener {
       minesweeperGame.reset()
     }
+
+    val modeBtn = findViewById<Button>(R.id.modeBtn)
+    modeBtn.setOnClickListener {
+      if (minesweeperGame.getMode() == MinesweeperGame.ModeEnum.EDITING) {
+        modeBtn.text = getString(R.string.flaggingMode)
+        minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
+      } else {
+        modeBtn.text = getString(R.string.editingMode)
+        minesweeperGame.setMode(MinesweeperGame.ModeEnum.EDITING)
+      }
+    }
   }
 }

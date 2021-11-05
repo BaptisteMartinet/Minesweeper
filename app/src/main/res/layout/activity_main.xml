@@ -7,30 +7,40 @@
   android:layout_height="match_parent"
   tools:context=".MainActivity"
   android:orientation="vertical">
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center">
+    android:layout_height="wrap_content">
 
     <Button
       android:id="@+id/resetBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Reset"
-      android:textSize="25sp" />
-  </LinearLayout>
+      android:text="@string/resetBtnText"
+      android:textSize="22sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+      android:id="@+id/modeBtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/editingMode"
+      android:textSize="22sp"
+      android:layout_marginEnd="10dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <griffith.baptiste.martinet.minesweeper.MinesweeperGame
     android:id="@+id/game"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="9"
+    android:layout_height="match_parent"
     app:boardSize="10"
     app:nbMines="20"
     app:cellBackgroundColor="#242424"
     app:cellBackgroundColorRevealed="#ff1717"
     app:cellStrokeColor="#ffffff"
-    app:cellPadding="5"
-    />
+    app:cellPadding="5" />
 </LinearLayout>

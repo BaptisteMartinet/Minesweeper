@@ -12,9 +12,15 @@ import androidx.core.content.ContextCompat
 import kotlin.math.floor
 
 class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, attrs) {
+  enum class ModeEnum {
+    EDITING,
+    FLAGGING,
+  }
+
   private var _boardSize: Int
   private var _nbMines: Int
   private var _cellSize: Float = 0f
+  private var _mode = ModeEnum.EDITING
 
   private val _paintCellBackground: Paint = Paint()
   private val _paintCellBackgroundRevealed: Paint = Paint()
@@ -55,6 +61,9 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
   }
 
+  fun setMode(mode: ModeEnum) { _mode = mode }
+  fun getMode(): ModeEnum = _mode
+
   fun reset() {
     _minesweeperEngine.reset()
     invalidate()
@@ -70,6 +79,10 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
     if (!cell.getRevealed()) {
       canvas.drawRect(rect, _paintCellBackground)
+
+      if (cell.getFlagged()) {
+        canvas.drawText(context.getString(R.string.flaggingMode), center.x, center.y, _paintCellValue)
+      }
     } else {
       val cellValue = cell.getValue()
       var text = cellValue.toString()
@@ -107,10 +120,14 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     if (!_minesweeperEngine.isPosInBounds(pos.x, pos.y))
       return
     val cell = _minesweeperEngine.getCellAtPos(pos.x, pos.y)
-    cell.setRevealed(true)
-    if (cell.getValue() == -1) {
-      _minesweeperEngine.setGameState(MinesweeperGameEngine.StatesEnum.FINISHED)
-      Toast.makeText(context, "Game terminated", Toast.LENGTH_LONG).show()
+    if (_mode == ModeEnum.EDITING) {
+      cell.setRevealed(true)
+      if (cell.getValue() == -1) {
+        _minesweeperEngine.setGameState(MinesweeperGameEngine.StatesEnum.FINISHED)
+        Toast.makeText(context, "Game terminated", Toast.LENGTH_LONG).show()
+      }
+    } else {
+      cell.setFlagged(true)
     }
     invalidate()
   }
