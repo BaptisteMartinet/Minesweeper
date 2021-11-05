@@ -46,6 +46,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       }
     }
     _paintCellValue.textAlign = Paint.Align.CENTER
+    _paintCellValue.isFakeBoldText = true
 
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
   }
@@ -62,7 +63,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     val cell = _minesweeperEngine.getCellAtPos(x, y)!!
     val topLeft = PointF(x * _cellSize, y * _cellSize)
     val bottomRight = PointF(x * _cellSize + _cellSize, y * _cellSize + _cellSize)
-    val center = PointF(topLeft.x + _cellSize * 0.5f, topLeft.y + _cellSize * 0.6f)
+    val center = PointF(topLeft.x + _cellSize * 0.5f, topLeft.y + _cellSize * 0.7f)
 
     val rect = RectF(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y)
 
@@ -127,7 +128,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     if (displaySize > height)
       displaySize = height
     _cellSize = displaySize / _boardSize.toFloat()
-    _paintCellValue.textSize = _cellSize / 2
+    _paintCellValue.textSize = _cellSize * 0.6f
     invalidate()
     requestLayout()
   }
