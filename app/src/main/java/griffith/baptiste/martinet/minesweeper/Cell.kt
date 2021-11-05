@@ -9,7 +9,7 @@ class Cell {
   fun setValue(value: Int) { _value = value }
   fun getValue(): Int = _value
 
-  fun setFlagged() { _isFlagged = true }
+  fun setFlagged(flagged: Boolean) { _isFlagged = flagged }
   fun isFlagged(): Boolean = _isFlagged
 
   fun setRevealed() { _isRevealed = true }

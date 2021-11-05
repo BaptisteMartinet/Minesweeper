@@ -81,6 +81,8 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
 
   fun revealCellAtPos(x: Int, y: Int, calledByUser: Boolean) {
     val cell = getCellAtPos(x, y) ?: return
+    if (calledByUser && cell.isFlagged())
+      return
     if (cell.isRevealed())
       return
     if (!calledByUser && cell.isMine())
@@ -105,7 +107,9 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
 
   fun flagCellAtPos(x: Int, y: Int): Boolean {
     val cell = getCellAtPos(x, y) ?: return false
-    cell.setFlagged()
+    if (cell.isRevealed())
+      return false
+    cell.setFlagged(!cell.isFlagged())
     return true
   }
 
