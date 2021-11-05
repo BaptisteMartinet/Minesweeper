@@ -4,13 +4,29 @@ import android.graphics.Point
 import kotlin.random.Random
 
 class MinesweeperGameEngine(private val _boardSize: Int, private val _nbMines: Int) {
-  private var _board: List<List<Cell>> = List(_boardSize) { List(_boardSize) { Cell() } }
+  enum class StatesEnum {
+    PLAYING,
+    FINISHED,
+  }
+
+  private lateinit var _board: List<List<Cell>>
+  private var _gameState = StatesEnum.PLAYING
 
   init {
     generateBoard()
   }
 
+  fun getGameState(): StatesEnum = _gameState
+
+  fun setGameState(state: StatesEnum) { _gameState = state }
+
+  fun reset() {
+    _gameState = StatesEnum.PLAYING
+    generateBoard()
+  }
+
   private fun generateBoard() {
+    _board = List(_boardSize) { List(_boardSize) { Cell() } }
     placeMines()
     fillCellsValues()
   }
@@ -36,7 +52,7 @@ class MinesweeperGameEngine(private val _boardSize: Int, private val _nbMines: I
     }
   }
 
-  private fun isPosInBounds(x: Int, y: Int): Boolean = (x in 0 until _boardSize && y in 0 until _boardSize)
+  fun isPosInBounds(x: Int, y: Int): Boolean = (x in 0 until _boardSize && y in 0 until _boardSize)
 
   fun getCellAtPos(x: Int, y: Int): Cell = _board[y][x]
 

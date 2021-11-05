@@ -1,11 +1,13 @@
 package griffith.baptiste.martinet.minesweeper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlin.math.floor
 
@@ -26,11 +28,23 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       try {
         _boardSize = getInteger(R.styleable.MinesweeperGame_boardSize, 10)
         _nbMines = getInteger(R.styleable.MinesweeperGame_nbMines, 20)
-        _paintCellBackground.color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor, ContextCompat.getColor(context, R.color.black))
-        _paintCellBackgroundRevealed.color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed, ContextCompat.getColor(context, R.color.purple_200))
-        _paintCellStroke.color = getColor(R.styleable.MinesweeperGame_cellStrokeColor, ContextCompat.getColor(context, R.color.white))
+        _paintCellBackground.color = getColor(
+          R.styleable.MinesweeperGame_cellBackgroundColor,
+          ContextCompat.getColor(context, R.color.black)
+        )
+        _paintCellBackgroundRevealed.color = getColor(
+          R.styleable.MinesweeperGame_cellBackgroundColorRevealed,
+          ContextCompat.getColor(context, R.color.purple_200)
+        )
+        _paintCellStroke.color = getColor(
+          R.styleable.MinesweeperGame_cellStrokeColor,
+          ContextCompat.getColor(context, R.color.white)
+        )
         _paintCellStroke.strokeWidth = getFloat(R.styleable.MinesweeperGame_cellPadding, 5f)
-        _paintCellValue.color = getColor(R.styleable.MinesweeperGame_cellValueColor, ContextCompat.getColor(context, R.color.white))
+        _paintCellValue.color = getColor(
+          R.styleable.MinesweeperGame_cellValueColor,
+          ContextCompat.getColor(context, R.color.white)
+        )
       } finally {
         recycle()
       }
@@ -41,12 +55,17 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
   }
 
+  fun reset() {
+    _minesweeperEngine.reset()
+    invalidate()
+  }
+
   private fun drawCell(x: Int, y: Int, canvas: Canvas) {
     val cell = _minesweeperEngine.getCellAtPos(x, y)
     val topLeft = PointF(x * _cellSize, y * _cellSize)
     val bottomRight = PointF(x * _cellSize + _cellSize, y * _cellSize + _cellSize)
-    val center = PointF(topLeft.x + _cellSize / 2, topLeft.y + _cellSize/2)
-    //Draw cell
+    val center = PointF(topLeft.x + _cellSize / 2, topLeft.y + _cellSize / 2)
+
     val rect = RectF(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y)
 
     if (!cell.getRevealed()) {
@@ -76,14 +95,29 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     drawBoard(canvas)
   }
 
-  override fun onTouchEvent(event: MotionEvent): Boolean {
+  private fun manageBoardClick(touchX: Float, touchY: Float) {
+    if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.FINISHED) {
+      Toast.makeText(context, "Game is already finished", Toast.LENGTH_SHORT).show()
+      return
+    }
     val pos = Point(
-      floor(event.x / _cellSize).toInt(),
-      floor(event.y / _cellSize).toInt()
+      floor(touchX / _cellSize).toInt(),
+      floor(touchY / _cellSize).toInt()
     )
+    if (!_minesweeperEngine.isPosInBounds(pos.x, pos.y))
+      return
     val cell = _minesweeperEngine.getCellAtPos(pos.x, pos.y)
     cell.setRevealed(true)
+    if (cell.getValue() == -1) {
+      _minesweeperEngine.setGameState(MinesweeperGameEngine.StatesEnum.FINISHED)
+      Toast.makeText(context, "Game terminated", Toast.LENGTH_LONG).show()
+    }
     invalidate()
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    manageBoardClick(event.x, event.y)
     return super.onTouchEvent(event)
   }
 
