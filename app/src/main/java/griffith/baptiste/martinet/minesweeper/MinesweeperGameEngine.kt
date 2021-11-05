@@ -109,7 +109,10 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     val cell = getCellAtPos(x, y) ?: return false
     if (cell.isRevealed())
       return false
-    cell.setFlagged(!cell.isFlagged())
+    val isCellFlagged = cell.isFlagged()
+    if (!isCellFlagged && getRemainingFlagsCount() <= 0)
+      return false
+    cell.setFlagged(!isCellFlagged)
     return true
   }
 
@@ -120,5 +123,18 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
           _board[y][x].setRevealed()
       }
     }
+  }
+
+  fun getRemainingFlagsCount(): Int = _nbMines - getFlaggedCellCount()
+
+  private fun getFlaggedCellCount(): Int {
+    var count = 0
+    for (y in _board.indices) {
+      for (x in _board[y].indices) {
+        if (_board[y][x].isFlagged())
+          count++
+      }
+    }
+    return count
   }
 }

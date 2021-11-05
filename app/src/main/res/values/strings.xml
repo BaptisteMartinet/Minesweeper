@@ -4,5 +4,5 @@
   <string name="flagging_mode">🚩</string>
   <string name="uncovering_mode">🎮</string>
   <string name="mine">💣</string>
-  <string name="nb_remaining_mines">🚩 %d</string>
+  <string name="nb_remaining_flags">🚩 %d</string>
 </resources>

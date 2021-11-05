@@ -7,6 +7,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlin.math.floor
@@ -16,6 +17,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     UNCOVERING,
     FLAGGING,
   }
+
+  lateinit var remainingFlagsTextView: TextView
 
   private var _boardSize: Int
   private var _nbMines: Int
@@ -56,6 +59,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   fun reset() {
     _minesweeperEngine.reset()
+    updateRemainingFlagsText()
     invalidate()
   }
 
@@ -114,8 +118,13 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       }
     } else {
       _minesweeperEngine.flagCellAtPos(pos.x, pos.y)
+      updateRemainingFlagsText()
     }
     invalidate()
+  }
+
+  fun updateRemainingFlagsText() {
+    remainingFlagsTextView.text = context.getString(R.string.nb_remaining_flags).format(_minesweeperEngine.getRemainingFlagsCount())
   }
 
   @SuppressLint("ClickableViewAccessibility")
