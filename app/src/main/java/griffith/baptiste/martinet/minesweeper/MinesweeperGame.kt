@@ -104,7 +104,6 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   private fun manageBoardClick(touchX: Float, touchY: Float) {
     if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.FINISHED) {
-      Toast.makeText(context, "Game is already finished", Toast.LENGTH_SHORT).show()
       return
     }
     val pos = Point(
@@ -118,8 +117,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       }
     } else {
       _minesweeperEngine.flagCellAtPos(pos.x, pos.y)
-      updateRemainingFlagsText()
     }
+    updateRemainingFlagsText()
     invalidate()
   }
 
