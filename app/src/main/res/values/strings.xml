@@ -1,7 +1,8 @@
 <resources>
   <string name="app_name">Minesweeper</string>
-  <string name="resetBtnText">Reset</string>
-  <string name="flaggingMode">🚩</string>
-  <string name="uncoveringMode">🎮</string>
+  <string name="reset_btn_text">Reset</string>
+  <string name="flagging_mode">🚩</string>
+  <string name="uncovering_mode">🎮</string>
   <string name="mine">💣</string>
+  <string name="nb_remaining_mines">🚩 %d</string>
 </resources>

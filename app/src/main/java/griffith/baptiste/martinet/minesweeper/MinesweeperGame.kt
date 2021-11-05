@@ -70,7 +70,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     if (!cell.isRevealed()) {
       canvas.drawRect(rect, _paintCellBackground[(x + y) % 2])
       if (cell.isFlagged()) {
-        canvas.drawText(context.getString(R.string.flaggingMode), center.x, center.y, _paintCellValue)
+        canvas.drawText(context.getString(R.string.flagging_mode), center.x, center.y, _paintCellValue)
       }
     } else {
       if (cell.isMine()) {

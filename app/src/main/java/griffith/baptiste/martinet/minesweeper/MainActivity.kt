@@ -18,10 +18,10 @@ class MainActivity : AppCompatActivity() {
     val modeBtn = findViewById<Button>(R.id.modeBtn)
     modeBtn.setOnClickListener {
       if (minesweeperGame.getMode() == MinesweeperGame.ModeEnum.UNCOVERING) {
-        modeBtn.text = getString(R.string.flaggingMode)
+        modeBtn.text = getString(R.string.flagging_mode)
         minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
       } else {
-        modeBtn.text = getString(R.string.uncoveringMode)
+        modeBtn.text = getString(R.string.uncovering_mode)
         minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
       }
     }
