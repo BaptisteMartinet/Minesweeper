@@ -87,7 +87,6 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
       return
     if (!calledByUser && cell.isMine())
       return
-    cell.setFlagged(false)
     cell.setRevealed()
     if (cell.isMine()) {
       finishGame()

@@ -12,7 +12,10 @@ class Cell {
   fun setFlagged(flagged: Boolean) { _isFlagged = flagged }
   fun isFlagged(): Boolean = _isFlagged
 
-  fun setRevealed() { _isRevealed = true }
+  fun setRevealed() {
+    setFlagged(false)
+    _isRevealed = true
+  }
   fun isRevealed(): Boolean = _isRevealed
 
   fun setMined() { _isMine = true }
