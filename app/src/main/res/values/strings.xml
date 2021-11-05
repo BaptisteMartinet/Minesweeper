@@ -2,6 +2,6 @@
   <string name="app_name">Minesweeper</string>
   <string name="resetBtnText">Reset</string>
   <string name="flaggingMode">🚩</string>
-  <string name="uncoveringMode">😯</string>
+  <string name="uncoveringMode">🎮</string>
   <string name="mine">💣</string>
 </resources>

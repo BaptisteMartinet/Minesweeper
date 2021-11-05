@@ -123,7 +123,10 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    _cellSize = width / _boardSize.toFloat()
+    var displaySize = width
+    if (displaySize > height)
+      displaySize = height
+    _cellSize = displaySize / _boardSize.toFloat()
     _paintCellValue.textSize = _cellSize / 2
     invalidate()
     requestLayout()
