@@ -17,12 +17,12 @@ class MainActivity : AppCompatActivity() {
 
     val modeBtn = findViewById<Button>(R.id.modeBtn)
     modeBtn.setOnClickListener {
-      if (minesweeperGame.getMode() == MinesweeperGame.ModeEnum.EDITING) {
+      if (minesweeperGame.getMode() == MinesweeperGame.ModeEnum.UNCOVERING) {
         modeBtn.text = getString(R.string.flaggingMode)
         minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
       } else {
         modeBtn.text = getString(R.string.editingMode)
-        minesweeperGame.setMode(MinesweeperGame.ModeEnum.EDITING)
+        minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
       }
     }
   }
