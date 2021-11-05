@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         modeBtn.text = getString(R.string.flaggingMode)
         minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
       } else {
-        modeBtn.text = getString(R.string.editingMode)
+        modeBtn.text = getString(R.string.uncoveringMode)
         minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
       }
     }

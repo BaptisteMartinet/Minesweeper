@@ -22,9 +22,9 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   private var _cellSize: Float = 0f
   private var _mode = ModeEnum.UNCOVERING
 
-  private val _paintCellBackground: Paint = Paint()
-  private val _paintCellBackgroundRevealed: Paint = Paint()
-  private val _paintCellStroke: Paint = Paint()
+  private val _paintCellBackground: List<Paint> = List(2) { Paint() }
+  private val _paintCellBackgroundRevealed: List<Paint> = List(2) { Paint() }
+  private val _paintCellBackgroundMine: Paint = Paint()
   private val _paintCellValue: Paint = TextPaint()
 
   private var _minesweeperEngine: MinesweeperGameEngine
@@ -34,28 +34,17 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       try {
         _boardSize = getInteger(R.styleable.MinesweeperGame_boardSize, 10)
         _nbMines = getInteger(R.styleable.MinesweeperGame_nbMines, 20)
-        _paintCellBackground.color = getColor(
-          R.styleable.MinesweeperGame_cellBackgroundColor,
-          ContextCompat.getColor(context, R.color.black)
-        )
-        _paintCellBackgroundRevealed.color = getColor(
-          R.styleable.MinesweeperGame_cellBackgroundColorRevealed,
-          ContextCompat.getColor(context, R.color.purple_200)
-        )
-        _paintCellStroke.color = getColor(
-          R.styleable.MinesweeperGame_cellStrokeColor,
-          ContextCompat.getColor(context, R.color.white)
-        )
-        _paintCellStroke.strokeWidth = getFloat(R.styleable.MinesweeperGame_cellPadding, 5f)
-        _paintCellValue.color = getColor(
-          R.styleable.MinesweeperGame_cellValueColor,
-          ContextCompat.getColor(context, R.color.white)
-        )
+
+        _paintCellBackground[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor, ContextCompat.getColor(context, R.color.black))
+        _paintCellBackground[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor2, ContextCompat.getColor(context, R.color.black))
+        _paintCellBackgroundRevealed[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed, ContextCompat.getColor(context, R.color.purple_200))
+        _paintCellBackgroundRevealed[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed2, ContextCompat.getColor(context, R.color.purple_200))
+        _paintCellBackgroundMine.color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorMine, ContextCompat.getColor(context, R.color.purple_700))
+        _paintCellValue.color = getColor(R.styleable.MinesweeperGame_cellValueColor, ContextCompat.getColor(context, R.color.white))
       } finally {
         recycle()
       }
     }
-    _paintCellStroke.style = Paint.Style.STROKE
     _paintCellValue.textAlign = Paint.Align.CENTER
 
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
@@ -73,26 +62,24 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     val cell = _minesweeperEngine.getCellAtPos(x, y)!!
     val topLeft = PointF(x * _cellSize, y * _cellSize)
     val bottomRight = PointF(x * _cellSize + _cellSize, y * _cellSize + _cellSize)
-    val center = PointF(topLeft.x + _cellSize / 2, topLeft.y + _cellSize / 2)
+    val center = PointF(topLeft.x + _cellSize * 0.5f, topLeft.y + _cellSize * 0.6f)
 
     val rect = RectF(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y)
 
     if (!cell.isRevealed()) {
-      canvas.drawRect(rect, _paintCellBackground)
-
+      canvas.drawRect(rect, _paintCellBackground[(x + y) % 2])
       if (cell.isFlagged()) {
         canvas.drawText(context.getString(R.string.flaggingMode), center.x, center.y, _paintCellValue)
       }
     } else {
-      val cellValue = cell.getValue()
-      var text = cellValue.toString()
-      if (cellValue == -1) {
-        text = "M"
+      if (cell.isMine()) {
+        canvas.drawRect(rect, _paintCellBackgroundMine)
+        canvas.drawText(context.getString(R.string.mine), center.x, center.y, _paintCellValue)
+      } else {
+        canvas.drawRect(rect, _paintCellBackgroundRevealed[(x + y) % 2])
+        canvas.drawText(cell.getValue().toString(), center.x, center.y, _paintCellValue)
       }
-      canvas.drawRect(rect, _paintCellBackgroundRevealed)
-      canvas.drawText(text, center.x, center.y, _paintCellValue)
     }
-    canvas.drawRect(rect, _paintCellStroke)
   }
 
   private fun drawBoard(canvas: Canvas) {
@@ -117,15 +104,13 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       floor(touchX / _cellSize).toInt(),
       floor(touchY / _cellSize).toInt()
     )
-    val cell = _minesweeperEngine.getCellAtPos(pos.x, pos.y) ?: return
     if (_mode == ModeEnum.UNCOVERING) {
-      cell.setRevealed(true)
-      if (cell.getValue() == -1) {
-        _minesweeperEngine.setGameState(MinesweeperGameEngine.StatesEnum.FINISHED)
+      _minesweeperEngine.revealCellAtPos(pos.x, pos.y, true)
+      if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.FINISHED) {
         Toast.makeText(context, "Game terminated", Toast.LENGTH_LONG).show()
       }
     } else {
-      cell.setFlagged(true)
+      _minesweeperEngine.flagCellAtPos(pos.x, pos.y)
     }
     invalidate()
   }

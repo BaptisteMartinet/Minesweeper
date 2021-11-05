@@ -19,7 +19,7 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
 
   fun getGameState(): StatesEnum = _gameState
 
-  fun setGameState(state: StatesEnum) { _gameState = state }
+  private fun setGameState(state: StatesEnum) { _gameState = state }
 
   fun reset() {
     _gameState = StatesEnum.PLAYING
@@ -32,6 +32,11 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     fillCellsValues()
   }
 
+  private fun finishGame() {
+    setGameState(StatesEnum.FINISHED)
+    revealAllMines()
+  }
+
   private fun placeMines() {
     var cell: Cell
     for (i in 0 until _nbMines) {
@@ -39,14 +44,14 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
         val mineCoordinates = Point(Random.nextInt(0, _boardSize), Random.nextInt(0, _boardSize))
         cell = getCellAtPos(mineCoordinates.x, mineCoordinates.y)!!
       } while (cell.getValue() == -1)
-      cell.setValue(-1)
+      cell.setMined()
     }
   }
 
   private fun fillCellsValues() {
     for (y in _board.indices) {
       for (x in _board[y].indices) {
-        if (getCellAtPos(x, y)!!.getValue() == -1)
+        if (getCellAtPos(x, y)!!.isMine())
           continue
         _board[y][x].setValue(getCellMinesNeighborCount(x, y))
       }
@@ -65,14 +70,51 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     var count = 0
     for (j in y - 1 until y + 2) {
       for (i in x - 1 until x + 2) {
-        if (!isPosInBounds(i, j))
-          continue
         if (j == y && i == x)
           continue
-        if (getCellAtPos(i, j)!!.getValue() == -1)
+        if (getCellAtPos(i, j)?.isMine() == true)
           count++
       }
     }
     return count
+  }
+
+  fun revealCellAtPos(x: Int, y: Int, calledByUser: Boolean) {
+    val cell = getCellAtPos(x, y) ?: return
+    if (cell.isRevealed())
+      return
+    if (!calledByUser && cell.isMine())
+      return
+    cell.setRevealed()
+    if (cell.isMine()) {
+      finishGame()
+      return
+    }
+    if (cell.getValue() != 0) {
+      return
+    }
+    for (j in y - 1 until y + 2) {
+      for (i in x - 1 until x + 2) {
+        if (j == y && i == x)
+          continue
+        revealCellAtPos(i, j, false)
+      }
+    }
+    return
+  }
+
+  fun flagCellAtPos(x: Int, y: Int): Boolean {
+    val cell = getCellAtPos(x, y) ?: return false
+    cell.setFlagged()
+    return true
+  }
+
+  private fun revealAllMines() {
+    for (y in _board.indices) {
+      for (x in _board[y].indices) {
+        if (_board[y][x].isMine())
+          _board[y][x].setRevealed()
+      }
+    }
   }
 }

@@ -26,7 +26,7 @@
       android:id="@+id/modeBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/editingMode"
+      android:text="@string/uncoveringMode"
       android:textSize="22sp"
       android:layout_marginEnd="10dp"
       app:layout_constraintEnd_toEndOf="parent"
@@ -39,8 +39,9 @@
     android:layout_height="match_parent"
     app:boardSize="10"
     app:nbMines="20"
-    app:cellBackgroundColor="#242424"
-    app:cellBackgroundColorRevealed="#ff1717"
-    app:cellStrokeColor="#ffffff"
-    app:cellPadding="5" />
+    app:cellBackgroundColor="#aad751"
+    app:cellBackgroundColor2="#a2d149"
+    app:cellBackgroundColorRevealed="#e5c29f"
+    app:cellBackgroundColorRevealed2="#d7b899"
+    app:cellBackgroundColorMine="#ff3369" />
 </LinearLayout>
