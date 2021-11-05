@@ -46,7 +46,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       }
     }
     _paintCellValue.textAlign = Paint.Align.CENTER
-    _paintCellValue.isFakeBoldText = true
+    _paintCellValue.typeface = Typeface.DEFAULT_BOLD
 
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
   }
@@ -78,7 +78,9 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
         canvas.drawText(context.getString(R.string.mine), center.x, center.y, _paintCellValue)
       } else {
         canvas.drawRect(rect, _paintCellBackgroundRevealed[(x + y) % 2])
-        canvas.drawText(cell.getValue().toString(), center.x, center.y, _paintCellValue)
+        val cellValue = cell.getValue()
+        if (cellValue != 0)
+          canvas.drawText(cellValue.toString(), center.x, center.y, _paintCellValue)
       }
     }
   }
