@@ -1,4 +1,4 @@
 # Minesweeper
 Minesweeper but it's in native Kotlin
 
-![android phone minesweeper screenshot](Untitled.png?raw=true "Minesweeper")
+![android phone minesweeper screenshot](image.png?raw=true "Minesweeper")
