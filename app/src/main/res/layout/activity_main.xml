@@ -34,6 +34,7 @@
     app:boardSize="10"
     app:nbMines="20"
     app:cellBackgroundColor="#242424"
+    app:cellBackgroundColorRevealed="#ff1717"
     app:cellStrokeColor="#ffffff"
     app:cellPadding="5"
     />

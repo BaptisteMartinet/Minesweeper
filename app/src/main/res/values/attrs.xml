@@ -4,7 +4,10 @@
     <attr name="boardSize" format="integer"/>
     <attr name="nbMines" format="integer"/>
     <attr name="cellBackgroundColor" format="color"/>
+    <attr name="cellBackgroundColorRevealed" format="color"/>
     <attr name="cellStrokeColor" format="color"/>
     <attr name="cellPadding" format="float"/>
+    <attr name="cellValueColor" format="color"/>
+    <attr name="cellMineColor" format="color"/>
   </declare-styleable>
 </resources>
