@@ -33,6 +33,9 @@
     android:layout_weight="9"
     app:boardSize="10"
     app:nbMines="20"
+    app:cellBackgroundColor="#242424"
+    app:cellStrokeColor="#ffffff"
+    app:cellPadding="5"
     />
 
   <Button

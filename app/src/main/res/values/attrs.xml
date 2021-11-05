@@ -3,5 +3,8 @@
   <declare-styleable name="MinesweeperGame">
     <attr name="boardSize" format="integer"/>
     <attr name="nbMines" format="integer"/>
+    <attr name="cellBackgroundColor" format="color"/>
+    <attr name="cellStrokeColor" format="color"/>
+    <attr name="cellPadding" format="float"/>
   </declare-styleable>
 </resources>
