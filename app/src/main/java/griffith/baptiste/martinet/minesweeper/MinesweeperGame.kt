@@ -3,17 +3,13 @@ package griffith.baptiste.martinet.minesweeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.icu.util.Measure
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import kotlin.math.floor
 import kotlin.math.min
 
@@ -108,17 +104,20 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   private fun manageBoardClick(touchX: Float, touchY: Float) {
-    if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.FINISHED) {
-      return
+    when(_minesweeperEngine.getGameState()) {
+      MinesweeperGameEngine.StatesEnum.PLAYING -> Unit
+      else -> return
     }
     val pos = Point(
       floor(touchX / _cellSize).toInt(),
       floor(touchY / _cellSize).toInt()
     )
     if (_mode == ModeEnum.UNCOVERING) {
-      _minesweeperEngine.revealCellAtPos(pos.x, pos.y, true)
-      if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.FINISHED) {
-        Toast.makeText(context, "Game terminated", Toast.LENGTH_LONG).show()
+      _minesweeperEngine.revealCellAtPos(pos.x, pos.y)
+      when(_minesweeperEngine.getGameState()) {
+        MinesweeperGameEngine.StatesEnum.LOST -> Toast.makeText(context, "You lost!", Toast.LENGTH_LONG).show()
+        MinesweeperGameEngine.StatesEnum.WIN -> Toast.makeText(context, "You win!", Toast.LENGTH_LONG).show()
+        else -> {}
       }
     } else {
       _minesweeperEngine.flagCellAtPos(pos.x, pos.y)

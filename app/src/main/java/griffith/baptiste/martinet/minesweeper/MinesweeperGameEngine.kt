@@ -6,7 +6,8 @@ import kotlin.random.Random
 class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: Int) {
   enum class StatesEnum {
     PLAYING,
-    FINISHED,
+    WIN,
+    LOST,
   }
 
   private lateinit var _board: List<List<Cell>>
@@ -32,9 +33,13 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     fillCellsValues()
   }
 
-  private fun finishGame() {
-    setGameState(StatesEnum.FINISHED)
-    revealAllMines()
+  private fun finishGame(state: StatesEnum) {
+    setGameState(state)
+    when(state) {
+      StatesEnum.WIN -> unflagAll()
+      StatesEnum.LOST -> revealAllMines()
+      else -> {}
+    }
   }
 
   private fun placeMines() {
@@ -79,30 +84,33 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     return count
   }
 
-  fun revealCellAtPos(x: Int, y: Int, calledByUser: Boolean) {
+  private fun revealCell(x: Int, y: Int) {
     val cell = getCellAtPos(x, y) ?: return
-    if (calledByUser && cell.isFlagged())
-      return
     if (cell.isRevealed())
       return
-    if (!calledByUser && cell.isMine())
-      return
     cell.setRevealed()
-    if (cell.isMine()) {
-      finishGame()
+    if (cell.isMine())
       return
-    }
-    if (cell.getValue() != 0) {
+    if (cell.getValue() != 0)
       return
-    }
     for (j in y - 1 until y + 2) {
       for (i in x - 1 until x + 2) {
         if (j == y && i == x)
           continue
-        revealCellAtPos(i, j, false)
+        revealCell(i, j)
       }
     }
-    return
+  }
+
+  fun revealCellAtPos(x: Int, y: Int) {
+    val cell = getCellAtPos(x, y) ?: return
+    if (cell.isFlagged())
+      return
+    revealCell(x, y)
+    if (cell.isMine())
+      finishGame(StatesEnum.LOST)
+    else if (checkVictory())
+      finishGame(StatesEnum.WIN)
   }
 
   fun flagCellAtPos(x: Int, y: Int): Boolean {
@@ -125,6 +133,14 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     }
   }
 
+  private fun unflagAll() {
+    for (y in _board.indices) {
+      for (x in _board[y].indices) {
+        _board[y][x].setFlagged(false)
+      }
+    }
+  }
+
   fun getRemainingFlagsCount(): Int = _nbMines - getFlaggedCellCount()
 
   private fun getFlaggedCellCount(): Int {
@@ -136,5 +152,15 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
       }
     }
     return count
+  }
+
+  private fun checkVictory(): Boolean {
+    for (y in _board.indices) {
+      for (x in _board[y].indices) {
+        if (!_board[y][x].isMine() && !_board[y][x].isRevealed())
+          return false
+      }
+    }
+    return true
   }
 }

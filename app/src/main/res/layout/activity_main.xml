@@ -58,7 +58,7 @@
     app:cellBackgroundColorMine="#ff3369"
     app:cellBackgroundColorRevealed="#e5c29f"
     app:cellBackgroundColorRevealed2="#d7b899"
-    app:nbMines="20" />
+    app:nbMines="5" />
 
   <TextView
     android:layout_width="match_parent"
