@@ -3,13 +3,17 @@ package griffith.baptiste.martinet.minesweeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.os.CountDownTimer
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 import kotlin.math.floor
 import kotlin.math.min
 
@@ -25,6 +29,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   private var _nbMines: Int
   private var _cellSize: Float = 0f
   private var _mode = ModeEnum.UNCOVERING
+  private lateinit var _timer: Timer
+  private var _isTimerRunning: Boolean = false
 
   private val _paintCellBackground: List<Paint> = List(2) { Paint() }
   private val _paintCellBackgroundRevealed: List<Paint> = List(2) { Paint() }
@@ -58,7 +64,24 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   fun setMode(mode: ModeEnum) { _mode = mode }
   fun getMode(): ModeEnum = _mode
 
+  private fun startTimer() {
+    if (_isTimerRunning)
+      return
+    _timer = fixedRateTimer("minesweeper-timer", true, 1000, 1000) {
+      println("Hello")
+    }
+    _isTimerRunning = true
+  }
+
+  private fun stopTimer() {
+    if (!_isTimerRunning)
+      return
+    _timer.cancel()
+    _isTimerRunning = false
+  }
+
   fun reset() {
+    stopTimer()
     _minesweeperEngine.reset()
     updateRemainingFlagsText()
     invalidate()
@@ -74,9 +97,10 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
     if (!cell.isRevealed()) {
       canvas.drawRect(rect, _paintCellBackground[(x + y) % 2])
-      if (cell.isFlagged()) {
+      if (_minesweeperEngine.getGameState() == MinesweeperGameEngine.StatesEnum.WIN)
+        canvas.drawText(context.getString(R.string.mine), center.x, center.y, _paintCellValue)
+      else if (cell.isFlagged())
         canvas.drawText(context.getString(R.string.flagging_mode), center.x, center.y, _paintCellValue)
-      }
     } else {
       if (cell.isMine()) {
         canvas.drawRect(rect, _paintCellBackgroundMine)
@@ -114,9 +138,16 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     )
     if (_mode == ModeEnum.UNCOVERING) {
       _minesweeperEngine.revealCellAtPos(pos.x, pos.y)
+      startTimer()
       when(_minesweeperEngine.getGameState()) {
-        MinesweeperGameEngine.StatesEnum.LOST -> Toast.makeText(context, "You lost!", Toast.LENGTH_LONG).show()
-        MinesweeperGameEngine.StatesEnum.WIN -> Toast.makeText(context, "You win!", Toast.LENGTH_LONG).show()
+        MinesweeperGameEngine.StatesEnum.LOST -> {
+          stopTimer()
+          Toast.makeText(context, "You lost!", Toast.LENGTH_LONG).show()
+        }
+        MinesweeperGameEngine.StatesEnum.WIN -> {
+          stopTimer()
+          Toast.makeText(context, "You win!", Toast.LENGTH_LONG).show()
+        }
         else -> {}
       }
     } else {
