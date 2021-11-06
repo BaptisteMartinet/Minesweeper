@@ -3,14 +3,19 @@ package griffith.baptiste.martinet.minesweeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.icu.util.Measure
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import kotlin.math.floor
+import kotlin.math.min
 
 class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, attrs) {
   enum class ModeEnum {
@@ -133,10 +138,11 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    var displaySize = width
-    if (displaySize > height)
-      displaySize = height
+    val w = MeasureSpec.getSize(widthMeasureSpec)
+    val h = MeasureSpec.getSize(heightMeasureSpec)
+    val displaySize = min(w, h)
+    val displaySizeMeasureSpec: Int = MeasureSpec.makeMeasureSpec(displaySize, MeasureSpec.EXACTLY)
+    super.onMeasure(displaySizeMeasureSpec, displaySizeMeasureSpec)
     _cellSize = displaySize / _boardSize.toFloat()
     _paintCellValue.textSize = _cellSize * 0.6f
     invalidate()

@@ -51,7 +51,7 @@
   <griffith.baptiste.martinet.minesweeper.MinesweeperGame
     android:id="@+id/game"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:boardSize="10"
     app:cellBackgroundColor="#aad751"
     app:cellBackgroundColor2="#a2d149"
@@ -59,4 +59,9 @@
     app:cellBackgroundColorRevealed="#e5c29f"
     app:cellBackgroundColorRevealed2="#d7b899"
     app:nbMines="20" />
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="test"/>
 </LinearLayout>
