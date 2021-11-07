@@ -18,6 +18,10 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
     generateBoard()
   }
 
+  fun getBoardSize(): Int = _boardSize
+
+  fun getNbMines(): Int = _nbMines
+
   fun getGameState(): StatesEnum = _gameState
 
   private fun setGameState(state: StatesEnum) { _gameState = state }

@@ -26,8 +26,6 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   lateinit var chronometer: Chronometer
   lateinit var bestTimeTextView: TextView
 
-  private var _boardSize: Int
-  private var _nbMines: Int
   private var _cellSize: Float = 0f
   private var _mode = ModeEnum.UNCOVERING
   private var _isTimerRunning: Boolean = false
@@ -43,10 +41,12 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   private var _currentBestTime: Long = 0
 
   init {
+    var boardSize: Int
+    var nbMines: Int
     context.theme.obtainStyledAttributes(attrs, R.styleable.MinesweeperGame, 0, 0).apply {
       try {
-        _boardSize = getInteger(R.styleable.MinesweeperGame_boardSize, 10)
-        _nbMines = getInteger(R.styleable.MinesweeperGame_nbMines, 20)
+        boardSize = getInteger(R.styleable.MinesweeperGame_boardSize, 10)
+        nbMines = getInteger(R.styleable.MinesweeperGame_nbMines, 20)
 
         _paintCellBackground[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor, ContextCompat.getColor(context, R.color.black))
         _paintCellBackground[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor2, ContextCompat.getColor(context, R.color.black))
@@ -61,7 +61,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     _paintCellValue.textAlign = Paint.Align.CENTER
     _paintCellValue.typeface = Typeface.DEFAULT_BOLD
 
-    _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
+    _minesweeperEngine = MinesweeperGameEngine(boardSize, nbMines)
     _db = DatabaseHelper.getInstance(context)
   }
 
@@ -93,12 +93,12 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       return
     val elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
     val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedMillis)
-    val bestTime = BestTime(elapsedSeconds, _boardSize, _nbMines)
+    val bestTime = BestTime(elapsedSeconds, _minesweeperEngine.getBoardSize(), _minesweeperEngine.getNbMines())
     _db.insertBestTime(bestTime)
   }
 
   fun updateCurrentBestTime() {
-    _currentBestTime = _db.getBestTime(_boardSize, _nbMines) ?: 0
+    _currentBestTime = _db.getBestTime(_minesweeperEngine.getBoardSize(), _minesweeperEngine.getNbMines()) ?: 0
     if (!this::bestTimeTextView.isInitialized)
       return
     bestTimeTextView.text = _currentBestTime.toString()
@@ -139,8 +139,9 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   private fun drawBoard(canvas: Canvas) {
-    for (y in 0 until _boardSize) {
-      for (x in 0 until _boardSize) {
+    val boardSize: Int = _minesweeperEngine.getBoardSize()
+    for (y in 0 until boardSize) {
+      for (x in 0 until boardSize) {
         drawCell(x, y, canvas)
       }
     }
@@ -201,7 +202,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     val displaySize = min(w, h)
     val displaySizeMeasureSpec: Int = MeasureSpec.makeMeasureSpec(displaySize, MeasureSpec.EXACTLY)
     super.onMeasure(displaySizeMeasureSpec, displaySizeMeasureSpec)
-    _cellSize = displaySize / _boardSize.toFloat()
+    _cellSize = displaySize / _minesweeperEngine.getBoardSize().toFloat()
     _paintCellValue.textSize = _cellSize * 0.6f
     invalidate()
     requestLayout()
