@@ -6,4 +6,5 @@
   <string name="mine">💣</string>
   <string name="nb_remaining_flags">🚩 %d</string>
   <string name="clock">%d</string>
+  <string name="default_best_time_value">0</string>
 </resources>

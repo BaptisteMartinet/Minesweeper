@@ -69,16 +69,12 @@ private constructor(context: Context) :
     return (result > 0)
   }
 
-  fun getBestTime(boardSize: Int, nbMines: Int): BestTime? {
+  fun getBestTime(boardSize: Int, nbMines: Int): Long? {
     val db = sqlInstance!!.readableDatabase
-    val cursor: Cursor = db.rawQuery("SELECT MAX(seconds) FROM $bestTimesTableName WHERE boardSize=$boardSize AND nbMines=$nbMines", null)
+    val cursor: Cursor = db.rawQuery("SELECT MIN(seconds) as bestTime FROM $bestTimesTableName WHERE boardSize=$boardSize AND nbMines=$nbMines", null)
     if (!cursor.moveToFirst())
       return null
-    val bestTime = BestTime(
-      cursor.getInt(cursor.getColumnIndexOrThrow("seconds")),
-      cursor.getInt(cursor.getColumnIndexOrThrow("boardSize")),
-      cursor.getInt(cursor.getColumnIndexOrThrow("nbMines"))
-    )
+    val bestTime = cursor.getLong(cursor.getColumnIndexOrThrow("bestTime"))
     cursor.close()
     return bestTime
   }

@@ -27,11 +27,14 @@ class MainActivity : AppCompatActivity() {
       val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedMilliseconds)
       chrono.text = elapsedSeconds.toString()
     }
+    val bestTimeTextView = findViewById<TextView>(R.id.bestTime)
     _minesweeperGame = findViewById(R.id.game)
 
     _minesweeperGame.chronometer = chronometer
+    _minesweeperGame.bestTimeTextView = bestTimeTextView
     _minesweeperGame.remainingFlagsTextView = remainingFlags
     _minesweeperGame.updateRemainingFlagsText()
+    _minesweeperGame.updateCurrentBestTime()
 
     val resetBtn = findViewById<Button>(R.id.resetBtn)
     resetBtn.setOnClickListener {

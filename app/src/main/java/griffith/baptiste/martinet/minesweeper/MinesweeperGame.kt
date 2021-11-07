@@ -3,19 +3,16 @@ package griffith.baptiste.martinet.minesweeper
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.os.CountDownTimer
 import android.os.SystemClock
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Chronometer
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import java.util.*
-import kotlin.concurrent.fixedRateTimer
+import java.util.concurrent.TimeUnit
 import kotlin.math.floor
 import kotlin.math.min
 
@@ -27,6 +24,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   lateinit var remainingFlagsTextView: TextView
   lateinit var chronometer: Chronometer
+  lateinit var bestTimeTextView: TextView
 
   private var _boardSize: Int
   private var _nbMines: Int
@@ -39,7 +37,10 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   private val _paintCellBackgroundMine: Paint = Paint()
   private val _paintCellValue: Paint = TextPaint()
 
-  private var _minesweeperEngine: MinesweeperGameEngine
+  private val _minesweeperEngine: MinesweeperGameEngine
+  private val _db: DatabaseHelper
+
+  private var _currentBestTime: Long = 0
 
   init {
     context.theme.obtainStyledAttributes(attrs, R.styleable.MinesweeperGame, 0, 0).apply {
@@ -61,12 +62,16 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     _paintCellValue.typeface = Typeface.DEFAULT_BOLD
 
     _minesweeperEngine = MinesweeperGameEngine(_boardSize, _nbMines)
+    _db = DatabaseHelper.getInstance(context)
   }
 
   fun setMode(mode: ModeEnum) { _mode = mode }
+
   fun getMode(): ModeEnum = _mode
 
   private fun startTimer() {
+    if (!this::chronometer.isInitialized)
+      return
     if (_isTimerRunning)
       return
     chronometer.base = SystemClock.elapsedRealtime()
@@ -75,6 +80,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   private fun stopTimer() {
+    if (!this::chronometer.isInitialized)
+      return
     if (!_isTimerRunning)
       return
     chronometer.stop()
@@ -82,8 +89,19 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   private fun registerTimeToDatabase() {
+    if (!this::chronometer.isInitialized)
+      return
     val elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
-    Log.i("minesweeper", "timervalue: ${elapsedMillis}")
+    val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedMillis)
+    val bestTime = BestTime(elapsedSeconds, _boardSize, _nbMines)
+    _db.insertBestTime(bestTime)
+  }
+
+  fun updateCurrentBestTime() {
+    _currentBestTime = _db.getBestTime(_boardSize, _nbMines) ?: 0
+    if (!this::bestTimeTextView.isInitialized)
+      return
+    bestTimeTextView.text = _currentBestTime.toString()
   }
 
   fun reset() {
@@ -153,6 +171,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
         MinesweeperGameEngine.StatesEnum.WIN -> {
           stopTimer()
           Toast.makeText(context, "You win!", Toast.LENGTH_LONG).show()
+          registerTimeToDatabase()
+          updateCurrentBestTime()
         }
         else -> {}
       }
@@ -164,6 +184,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   fun updateRemainingFlagsText() {
+    if (!this::remainingFlagsTextView.isInitialized)
+      return
     remainingFlagsTextView.text = context.getString(R.string.nb_remaining_flags).format(_minesweeperEngine.getRemainingFlagsCount())
   }
 

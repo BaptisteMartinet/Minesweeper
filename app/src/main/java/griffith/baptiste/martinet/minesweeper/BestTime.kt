@@ -1,3 +1,3 @@
 package griffith.baptiste.martinet.minesweeper
 
-class BestTime(val seconds: Int, val boardSize: Int, val nbMines: Int)
+class BestTime(val seconds: Long, val boardSize: Int, val nbMines: Int)

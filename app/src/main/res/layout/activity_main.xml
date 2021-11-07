@@ -104,7 +104,7 @@
       android:id="@+id/bestTime"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="coucou"
+      android:text="@string/default_best_time_value"
       android:textColor="@color/white"
       android:textSize="22sp"
       android:textStyle="bold"
