@@ -52,7 +52,7 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
       do {
         val mineCoordinates = Point(Random.nextInt(0, _boardSize), Random.nextInt(0, _boardSize))
         cell = getCellAtPos(mineCoordinates.x, mineCoordinates.y)!!
-      } while (cell.getValue() == -1)
+      } while (cell.isMine())
       cell.setMined()
     }
   }
