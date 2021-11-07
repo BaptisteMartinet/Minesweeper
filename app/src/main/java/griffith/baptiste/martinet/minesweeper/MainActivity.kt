@@ -5,20 +5,34 @@ import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
-import android.widget.Toast
+import android.os.SystemClock
+import java.util.concurrent.TimeUnit
+
+
 
 class MainActivity : AppCompatActivity() {
-  private lateinit var minesweeperGame: MinesweeperGame
+  private lateinit var _minesweeperGame: MinesweeperGame
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
     val remainingFlags = findViewById<TextView>(R.id.remainingFlags)
-    minesweeperGame = findViewById(R.id.game)
-    minesweeperGame.remainingFlagsTextView = remainingFlags
-    minesweeperGame.updateRemainingFlagsText()
+    val chronometer = findViewById<Chronometer>(R.id.chronometer)
+    chronometer.text = "0"
+    chronometer.setOnChronometerTickListener { chrono ->
+      val elapsedMilliseconds = SystemClock.elapsedRealtime() - chrono.base
+      val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedMilliseconds)
+      chrono.text = elapsedSeconds.toString()
+    }
+    _minesweeperGame = findViewById(R.id.game)
+
+    _minesweeperGame.chronometer = chronometer
+    _minesweeperGame.remainingFlagsTextView = remainingFlags
+    _minesweeperGame.updateRemainingFlagsText()
+
     val resetBtn = findViewById<Button>(R.id.resetBtn)
     resetBtn.setOnClickListener {
       showDialog()
@@ -26,12 +40,12 @@ class MainActivity : AppCompatActivity() {
 
     val modeBtn = findViewById<Button>(R.id.modeBtn)
     modeBtn.setOnClickListener {
-      if (minesweeperGame.getMode() == MinesweeperGame.ModeEnum.UNCOVERING) {
+      if (_minesweeperGame.getMode() == MinesweeperGame.ModeEnum.UNCOVERING) {
         modeBtn.text = getString(R.string.flagging_mode)
-        minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
+        _minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
       } else {
         modeBtn.text = getString(R.string.uncovering_mode)
-        minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
+        _minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
       }
     }
   }
@@ -43,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     builder.setMessage("Do you want to reset the game?")
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
-        DialogInterface.BUTTON_POSITIVE -> minesweeperGame.reset()
+        DialogInterface.BUTTON_POSITIVE -> _minesweeperGame.reset()
       }
     }
     builder.setPositiveButton("YES", dialogClickListener)

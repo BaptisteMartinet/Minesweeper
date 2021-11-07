@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.os.CountDownTimer
+import android.os.SystemClock
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Chronometer
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -24,12 +26,12 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   }
 
   lateinit var remainingFlagsTextView: TextView
+  lateinit var chronometer: Chronometer
 
   private var _boardSize: Int
   private var _nbMines: Int
   private var _cellSize: Float = 0f
   private var _mode = ModeEnum.UNCOVERING
-  private lateinit var _timer: Timer
   private var _isTimerRunning: Boolean = false
 
   private val _paintCellBackground: List<Paint> = List(2) { Paint() }
@@ -67,17 +69,21 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   private fun startTimer() {
     if (_isTimerRunning)
       return
-    _timer = fixedRateTimer("minesweeper-timer", true, 1000, 1000) {
-      println("Hello")
-    }
+    chronometer.base = SystemClock.elapsedRealtime()
+    chronometer.start()
     _isTimerRunning = true
   }
 
   private fun stopTimer() {
     if (!_isTimerRunning)
       return
-    _timer.cancel()
+    chronometer.stop()
     _isTimerRunning = false
+  }
+
+  private fun registerTimeToDatabase() {
+    val elapsedMillis: Long = SystemClock.elapsedRealtime() - chronometer.base
+    Log.i("minesweeper", "timervalue: ${elapsedMillis}")
   }
 
   fun reset() {
