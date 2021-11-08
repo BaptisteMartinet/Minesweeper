@@ -55,9 +55,9 @@
     app:boardSize="10"
     app:cellBackgroundColor="#aad751"
     app:cellBackgroundColor2="#a2d149"
-    app:cellBackgroundColorMine="#ff3369"
     app:cellBackgroundColorRevealed="#e5c29f"
     app:cellBackgroundColorRevealed2="#d7b899"
+    app:cellBackgroundColorMine="#ff3369"
     app:nbMines="5" />
 
   <androidx.constraintlayout.widget.ConstraintLayout

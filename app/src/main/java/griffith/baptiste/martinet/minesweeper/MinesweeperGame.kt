@@ -48,11 +48,11 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
         boardSize = getInteger(R.styleable.MinesweeperGame_boardSize, 10)
         nbMines = getInteger(R.styleable.MinesweeperGame_nbMines, 20)
 
-        _paintCellBackground[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor, ContextCompat.getColor(context, R.color.black))
-        _paintCellBackground[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor2, ContextCompat.getColor(context, R.color.black))
-        _paintCellBackgroundRevealed[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed, ContextCompat.getColor(context, R.color.purple_200))
-        _paintCellBackgroundRevealed[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed2, ContextCompat.getColor(context, R.color.purple_200))
-        _paintCellBackgroundMine.color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorMine, ContextCompat.getColor(context, R.color.purple_700))
+        _paintCellBackground[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor, ContextCompat.getColor(context, R.color.lightGreen))
+        _paintCellBackground[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColor2, ContextCompat.getColor(context, R.color.darkGreen))
+        _paintCellBackgroundRevealed[0].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed, ContextCompat.getColor(context, R.color.lightBrown))
+        _paintCellBackgroundRevealed[1].color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorRevealed2, ContextCompat.getColor(context, R.color.darkBrown))
+        _paintCellBackgroundMine.color = getColor(R.styleable.MinesweeperGame_cellBackgroundColorMine, ContextCompat.getColor(context, R.color.red))
         _paintCellValue.color = getColor(R.styleable.MinesweeperGame_cellValueColor, ContextCompat.getColor(context, R.color.white))
       } finally {
         recycle()
