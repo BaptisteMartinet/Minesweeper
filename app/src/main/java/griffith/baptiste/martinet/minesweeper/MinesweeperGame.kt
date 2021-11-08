@@ -88,6 +88,12 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     _isTimerRunning = false
   }
 
+  private fun resetTimer() {
+    if (!this::chronometer.isInitialized)
+      return
+    chronometer.base = SystemClock.elapsedRealtime()
+  }
+
   private fun registerTimeToDatabase() {
     if (!this::chronometer.isInitialized)
       return
@@ -106,6 +112,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   fun reset() {
     stopTimer()
+    resetTimer()
     _minesweeperEngine.reset()
     updateRemainingFlagsText()
     invalidate()
