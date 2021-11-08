@@ -3,7 +3,7 @@ package griffith.baptiste.martinet.minesweeper
 import android.graphics.Point
 import kotlin.random.Random
 
-class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: Int) {
+class MinesweeperGameEngine(private var _boardSize: Int, private var _nbMines: Int) {
   enum class StatesEnum {
     PLAYING,
     WIN,
@@ -16,6 +16,12 @@ class MinesweeperGameEngine(private val _boardSize: Int, private var _nbMines: I
   init {
     _nbMines.coerceIn(0, _boardSize*_boardSize)
     generateBoard()
+  }
+
+  fun updateBoardSettings(boardSize: Int, nbMines: Int) {
+    _boardSize = boardSize
+    _nbMines = nbMines
+    reset()
   }
 
   fun getBoardSize(): Int = _boardSize

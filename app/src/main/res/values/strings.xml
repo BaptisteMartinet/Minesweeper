@@ -11,5 +11,6 @@
     <item>Simple</item>
     <item>Hard</item>
     <item>Expert</item>
+    <item>Impossible</item>
   </string-array>
 </resources>

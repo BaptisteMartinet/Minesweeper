@@ -25,7 +25,34 @@ class MainActivity : AppCompatActivity() {
       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
       difficultySpinner.adapter = adapter
       difficultySpinner.onItemSelectedListener = object:AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {}
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+          val boardSize: Int
+          val nbMines: Int
+          when(pos) {
+            0 -> { //simple
+              boardSize = 9
+              nbMines = 10
+            }
+            1 -> { //hard
+              boardSize = 10
+              nbMines = 20
+            }
+            2 -> { //expert
+              boardSize = 16
+              nbMines = 40
+            }
+            3 -> { //impossible
+              boardSize = 30
+              nbMines = 150
+            }
+            else -> {
+              boardSize = 10
+              nbMines = 20
+            }
+          }
+          _minesweeperGame.updateBoardSettings(boardSize, nbMines)
+          Toast.makeText(applicationContext, "Changed difficulty to ${parent?.getItemAtPosition(pos)}.\n(boardSize: $boardSize, nbMines: $nbMines)", Toast.LENGTH_SHORT).show()
+        }
         override fun onNothingSelected(parent: AdapterView<*>?) {}
       }
     }

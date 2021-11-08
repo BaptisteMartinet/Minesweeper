@@ -40,6 +40,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   private var _currentBestTime: Long = 0
 
+  private var _displaySize: Int = 0
+
   init {
     var boardSize: Int
     var nbMines: Int
@@ -68,6 +70,15 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
   fun setMode(mode: ModeEnum) { _mode = mode }
 
   fun getMode(): ModeEnum = _mode
+
+  fun updateBoardSettings(boardSize: Int, nbMines: Int) {
+    stopTimer()
+    resetTimer()
+    _minesweeperEngine.updateBoardSettings(boardSize, nbMines)
+    updateDisplaySize()
+    updateRemainingFlagsText()
+    updateCurrentBestTime()
+  }
 
   private fun startTimer() {
     if (!this::chronometer.isInitialized)
@@ -203,15 +214,19 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     return super.onTouchEvent(event)
   }
 
+  private fun updateDisplaySize() {
+    _cellSize = _displaySize / _minesweeperEngine.getBoardSize().toFloat()
+    _paintCellValue.textSize = _cellSize * 0.6f
+    invalidate()
+  }
+
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val w = MeasureSpec.getSize(widthMeasureSpec)
     val h = MeasureSpec.getSize(heightMeasureSpec)
-    val displaySize = min(w, h)
-    val displaySizeMeasureSpec: Int = MeasureSpec.makeMeasureSpec(displaySize, MeasureSpec.EXACTLY)
+    _displaySize = min(w, h)
+    val displaySizeMeasureSpec: Int = MeasureSpec.makeMeasureSpec(_displaySize, MeasureSpec.EXACTLY)
     super.onMeasure(displaySizeMeasureSpec, displaySizeMeasureSpec)
-    _cellSize = displaySize / _minesweeperEngine.getBoardSize().toFloat()
-    _paintCellValue.textSize = _cellSize * 0.6f
-    invalidate()
+    updateDisplaySize()
     requestLayout()
   }
 }
