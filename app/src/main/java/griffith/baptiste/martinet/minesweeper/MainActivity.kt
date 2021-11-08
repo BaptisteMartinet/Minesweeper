@@ -4,13 +4,10 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.TextView
 import android.os.SystemClock
+import android.view.View
+import android.widget.*
 import java.util.concurrent.TimeUnit
-
-
 
 class MainActivity : AppCompatActivity() {
   private lateinit var _minesweeperGame: MinesweeperGame
@@ -18,6 +15,20 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    val difficultySpinner = findViewById<Spinner>(R.id.difficultySpinner)
+    ArrayAdapter.createFromResource(
+      this,
+      R.array.difficulties,
+      R.layout.custom_spinner_item
+    ).also { adapter ->
+      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+      difficultySpinner.adapter = adapter
+      difficultySpinner.onItemSelectedListener = object:AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {}
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+      }
+    }
 
     val remainingFlags = findViewById<TextView>(R.id.remainingFlags)
     val chronometer = findViewById<Chronometer>(R.id.chronometer)

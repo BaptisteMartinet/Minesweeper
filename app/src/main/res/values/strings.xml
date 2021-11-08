@@ -7,4 +7,9 @@
   <string name="nb_remaining_flags">🚩 %d</string>
   <string name="clock">%d</string>
   <string name="default_best_time_value">0</string>
+  <string-array name="difficulties">
+    <item>Simple</item>
+    <item>Hard</item>
+    <item>Expert</item>
+  </string-array>
 </resources>

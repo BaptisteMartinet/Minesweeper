@@ -16,7 +16,7 @@
       android:id="@+id/remainingFlags"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
+      android:layout_marginStart="15dp"
       android:text="@string/nb_remaining_flags"
       android:textColor="@color/white"
       android:textSize="18sp"
@@ -24,28 +24,29 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+      android:id="@+id/difficultySpinner"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="15dp"
+      android:spinnerMode="dropdown"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:entries="@array/difficulties"/>
+
     <Button
       android:id="@+id/resetBtn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:backgroundTint="#68a63d"
       android:text="@string/reset_btn_text"
-      android:textSize="22sp"
+      android:textSize="16sp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-      android:id="@+id/modeBtn"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="10dp"
-      android:backgroundTint="#68a63d"
-      android:text="@string/uncovering_mode"
-      android:textSize="22sp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <griffith.baptiste.martinet.minesweeper.MinesweeperGame
@@ -55,10 +56,28 @@
     app:boardSize="10"
     app:cellBackgroundColor="#aad751"
     app:cellBackgroundColor2="#a2d149"
+    app:cellBackgroundColorMine="#ff3369"
     app:cellBackgroundColorRevealed="#e5c29f"
     app:cellBackgroundColorRevealed2="#d7b899"
-    app:cellBackgroundColorMine="#ff3369"
     app:nbMines="5" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#46b0e3">
+
+    <Button
+      android:id="@+id/modeBtn"
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"
+      android:backgroundTint="#68a63d"
+      android:text="@string/uncovering_mode"
+      android:textSize="26sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
