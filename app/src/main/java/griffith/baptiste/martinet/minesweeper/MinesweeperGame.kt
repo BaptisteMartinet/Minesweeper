@@ -227,6 +227,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
         else
           manageBoardClick(event.x, event.y)
       }
+      else -> return false
     }
     return true
   }
