@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     val remainingFlags = findViewById<TextView>(R.id.remainingFlags)
     val chronometer = findViewById<Chronometer>(R.id.chronometer)
-    chronometer.text = "0"
     chronometer.setOnChronometerTickListener { chrono ->
       val elapsedMilliseconds = SystemClock.elapsedRealtime() - chrono.base
       val elapsedSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedMilliseconds)
