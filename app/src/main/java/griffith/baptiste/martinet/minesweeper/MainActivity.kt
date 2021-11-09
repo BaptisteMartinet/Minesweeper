@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
               nbMines = 40
             }
             3 -> { //impossible
-              boardSize = 30
-              nbMines = 150
+              boardSize = 100
+              nbMines = 9999
             }
             else -> {
               boardSize = 10
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
           }
           _minesweeperGame.updateBoardSettings(boardSize, nbMines)
-          Toast.makeText(applicationContext, "Changed difficulty to ${parent?.getItemAtPosition(pos)}.\n(boardSize: $boardSize, nbMines: $nbMines)", Toast.LENGTH_SHORT).show()
+          Toast.makeText(applicationContext, "Changed difficulty to ${parent?.getItemAtPosition(pos)}.\n(boardSize: ${boardSize}x${boardSize}, nbMines: $nbMines)", Toast.LENGTH_SHORT).show()
         }
         override fun onNothingSelected(parent: AdapterView<*>?) {}
       }

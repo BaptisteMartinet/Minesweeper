@@ -86,8 +86,8 @@
 
     <ImageView
       android:id="@+id/imageClock"
-      android:layout_width="90dp"
-      android:layout_height="90dp"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
       android:layout_marginStart="70dp"
       android:src="@drawable/clock_icon"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -101,7 +101,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textColor="@color/white"
-      android:textSize="22sp"
+      android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="@+id/imageClock"
       app:layout_constraintStart_toStartOf="@+id/imageClock"
@@ -109,8 +109,8 @@
 
     <ImageView
       android:id="@+id/imageTrophy"
-      android:layout_width="90dp"
-      android:layout_height="90dp"
+      android:layout_width="80dp"
+      android:layout_height="80dp"
       android:layout_marginEnd="70dp"
       android:src="@drawable/trophy_icon"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +125,7 @@
       android:layout_height="wrap_content"
       android:text="@string/default_best_time_value"
       android:textColor="@color/white"
-      android:textSize="22sp"
+      android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="@+id/imageTrophy"
       app:layout_constraintStart_toStartOf="@+id/imageTrophy"
