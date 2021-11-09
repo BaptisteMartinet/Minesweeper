@@ -42,6 +42,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   private var _displaySize: Int = 0
 
+  private val _cellValueColors: IntArray
+
   init {
     var boardSize: Int
     var nbMines: Int
@@ -65,6 +67,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
     _minesweeperEngine = MinesweeperGameEngine(boardSize, nbMines)
     _db = DatabaseHelper.getInstance(context)
+
+    _cellValueColors = context.resources.getIntArray(R.array.valueColors)
   }
 
   fun setMode(mode: ModeEnum) { _mode = mode }
@@ -134,8 +138,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     val topLeft = PointF(x * _cellSize, y * _cellSize)
     val bottomRight = PointF(x * _cellSize + _cellSize, y * _cellSize + _cellSize)
     val center = PointF(topLeft.x + _cellSize * 0.5f, topLeft.y + _cellSize * 0.7f)
-
     val rect = RectF(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y)
+    _paintCellValue.color = context.getColor(R.color.white)
 
     if (!cell.isRevealed()) {
       canvas.drawRect(rect, _paintCellBackground[(x + y) % 2])
@@ -150,8 +154,10 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       } else {
         canvas.drawRect(rect, _paintCellBackgroundRevealed[(x + y) % 2])
         val cellValue = cell.getValue()
-        if (cellValue != 0)
+        if (cellValue != 0) {
+          _paintCellValue.color = _cellValueColors[cellValue - 1]
           canvas.drawText(cellValue.toString(), center.x, center.y, _paintCellValue)
+        }
       }
     }
   }
