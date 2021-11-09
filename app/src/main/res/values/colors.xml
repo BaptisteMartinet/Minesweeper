@@ -25,7 +25,6 @@
   <color name="value6">#7d4a2c</color>
   <color name="value7">#e37bc2</color>
   <color name="value8">#def227</color>
-  
   <array name="valueColors">
     <item>@color/value1</item>
     <item>@color/value2</item>
