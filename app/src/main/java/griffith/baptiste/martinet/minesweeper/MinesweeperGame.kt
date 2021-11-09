@@ -44,6 +44,8 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   private val _cellValueColors: IntArray
 
+  private var _lastTouchInputTime: Long = 0
+
   init {
     var boardSize: Int
     var nbMines: Int
@@ -176,7 +178,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
     drawBoard(canvas)
   }
 
-  private fun manageBoardClick(touchX: Float, touchY: Float) {
+  private fun manageBoardClick(touchX: Float, touchY: Float, forceFlagging: Boolean = false) {
     when(_minesweeperEngine.getGameState()) {
       MinesweeperGameEngine.StatesEnum.PLAYING -> Unit
       else -> return
@@ -185,7 +187,7 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
       floor(touchX / _cellSize).toInt(),
       floor(touchY / _cellSize).toInt()
     )
-    if (_mode == ModeEnum.UNCOVERING) {
+    if (_mode == ModeEnum.UNCOVERING && !forceFlagging) {
       _minesweeperEngine.revealCellAtPos(pos.x, pos.y)
       startTimer()
       when(_minesweeperEngine.getGameState()) {
@@ -216,8 +218,17 @@ class MinesweeperGame(context: Context, attrs: AttributeSet) : View(context, att
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    manageBoardClick(event.x, event.y)
-    return super.onTouchEvent(event)
+    super.onTouchEvent(event)
+    when(event.action) {
+      MotionEvent.ACTION_DOWN -> _lastTouchInputTime = SystemClock.elapsedRealtime()
+      MotionEvent.ACTION_UP -> {
+        if (SystemClock.elapsedRealtime() - _lastTouchInputTime > 200)
+          manageBoardClick(event.x, event.y, true)
+        else
+          manageBoardClick(event.x, event.y)
+      }
+    }
+    return true
   }
 
   private fun updateDisplaySize() {
