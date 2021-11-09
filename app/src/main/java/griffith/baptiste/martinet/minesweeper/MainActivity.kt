@@ -29,26 +29,11 @@ class MainActivity : AppCompatActivity() {
           val boardSize: Int
           val nbMines: Int
           when(pos) {
-            0 -> { //simple
-              boardSize = 9
-              nbMines = 10
-            }
-            1 -> { //hard
-              boardSize = 10
-              nbMines = 20
-            }
-            2 -> { //expert
-              boardSize = 16
-              nbMines = 40
-            }
-            3 -> { //impossible
-              boardSize = 100
-              nbMines = 9999
-            }
-            else -> {
-              boardSize = 10
-              nbMines = 20
-            }
+            0 -> { boardSize = 9; nbMines = 10 } // Easy
+            1 -> { boardSize = 10; nbMines = 20 } // Hard
+            2 -> { boardSize = 16; nbMines = 40 } // Expert
+            3 -> { boardSize = 100; nbMines = 9999 } // Impossible
+            else -> { boardSize = 10; nbMines = 20 } // Default
           }
           _minesweeperGame.updateBoardSettings(boardSize, nbMines)
           Toast.makeText(applicationContext, "Changed difficulty to ${parent?.getItemAtPosition(pos)}.\n(boardSize: ${boardSize}x${boardSize}, nbMines: $nbMines)", Toast.LENGTH_SHORT).show()

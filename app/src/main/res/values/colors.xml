@@ -16,4 +16,24 @@
 
   <color name="lightGreenBtn">#68a63d</color>
   <color name="yellowBtn">#c9c93c</color>
+
+  <color name="value1">#1976d2</color>
+  <color name="value2">#388e3c</color>
+  <color name="value3">#d32f2f</color>
+  <color name="value4">#8833a1</color>
+  <color name="value5">#ff8f00</color>
+  <color name="value6">#7d4a2c</color>
+  <color name="value7">#e37bc2</color>
+  <color name="value8">#def227</color>
+  
+  <array name="valueColors">
+    <item>@color/value1</item>
+    <item>@color/value2</item>
+    <item>@color/value3</item>
+    <item>@color/value4</item>
+    <item>@color/value5</item>
+    <item>@color/value6</item>
+    <item>@color/value7</item>
+    <item>@color/value8</item>
+  </array>
 </resources>
