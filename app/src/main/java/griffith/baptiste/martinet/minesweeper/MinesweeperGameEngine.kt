@@ -127,10 +127,7 @@ class MinesweeperGameEngine(private var _boardSize: Int, private var _nbMines: I
     val cell = getCellAtPos(x, y) ?: return false
     if (cell.isRevealed())
       return false
-    val isCellFlagged = cell.isFlagged()
-    if (!isCellFlagged && getRemainingFlagsCount() <= 0)
-      return false
-    cell.setFlagged(!isCellFlagged)
+    cell.setFlagged(!cell.isFlagged())
     return true
   }
 
