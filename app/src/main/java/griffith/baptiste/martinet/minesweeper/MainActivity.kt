@@ -83,9 +83,11 @@ class MainActivity : AppCompatActivity() {
     modeBtn.setOnClickListener {
       if (_minesweeperGame.getMode() == MinesweeperGame.ModeEnum.UNCOVERING) {
         modeBtn.text = getString(R.string.flagging_mode)
+        modeBtn.setBackgroundColor(getColor(R.color.yellowBtn))
         _minesweeperGame.setMode(MinesweeperGame.ModeEnum.FLAGGING)
       } else {
         modeBtn.text = getString(R.string.uncovering_mode)
+        modeBtn.setBackgroundColor(getColor(R.color.lightGreenBtn))
         _minesweeperGame.setMode(MinesweeperGame.ModeEnum.UNCOVERING)
       }
     }

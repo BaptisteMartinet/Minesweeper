@@ -13,4 +13,7 @@
   <color name="lightBrown">#e5c29f</color>
   <color name="darkBrown">#d7b899</color>
   <color name="red">#ff3369</color>
+
+  <color name="lightGreenBtn">#68a63d</color>
+  <color name="yellowBtn">#c9c93c</color>
 </resources>
