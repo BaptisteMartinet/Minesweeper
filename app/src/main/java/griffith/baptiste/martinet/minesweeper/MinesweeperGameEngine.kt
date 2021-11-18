@@ -94,32 +94,27 @@ class MinesweeperGameEngine(private var _boardSize: Int, private var _nbMines: I
     return count
   }
 
-  private fun revealCell(x: Int, y: Int) {
+  fun revealCellAtPos(x: Int, y: Int, isPlayerInitialized: Boolean = true) {
     val cell = getCellAtPos(x, y) ?: return
     if (cell.isRevealed())
       return
+    if (cell.isFlagged() && isPlayerInitialized)
+      return
     cell.setRevealed()
-    if (cell.isMine())
+    if (cell.isMine()) {
+      finishGame(StatesEnum.LOST)
       return
-    if (cell.getValue() != 0)
-      return
-    for (j in y - 1 until y + 2) {
-      for (i in x - 1 until x + 2) {
-        if (j == y && i == x)
-          continue
-        revealCell(i, j)
+    }
+    if (cell.getValue() == 0) {
+      for (j in y - 1 until y + 2) {
+        for (i in x - 1 until x + 2) {
+          if (j == y && i == x)
+            continue
+          revealCellAtPos(i, j, false)
+        }
       }
     }
-  }
-
-  fun revealCellAtPos(x: Int, y: Int) {
-    val cell = getCellAtPos(x, y) ?: return
-    if (cell.isFlagged())
-      return
-    revealCell(x, y)
-    if (cell.isMine())
-      finishGame(StatesEnum.LOST)
-    else if (checkVictory())
+    if (checkVictory())
       finishGame(StatesEnum.WIN)
   }
 
