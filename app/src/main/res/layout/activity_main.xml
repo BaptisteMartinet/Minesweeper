@@ -68,7 +68,7 @@
 
     <Button
       android:id="@+id/modeBtn"
-      android:layout_width="100dp"
+      android:layout_width="150dp"
       android:layout_height="wrap_content"
       android:backgroundTint="#68a63d"
       android:text="@string/uncovering_mode"

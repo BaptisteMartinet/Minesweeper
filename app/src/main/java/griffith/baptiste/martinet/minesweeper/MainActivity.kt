@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var dialog: AlertDialog
     val builder = AlertDialog.Builder(this)
     builder.setTitle("Reset board?")
-    builder.setMessage("Do you want to reset the game?")
+    builder.setMessage("Tip: Holding a cell will place a flag on it.")
     val dialogClickListener = DialogInterface.OnClickListener { _, which ->
       when (which) {
         DialogInterface.BUTTON_POSITIVE -> _minesweeperGame.reset()
