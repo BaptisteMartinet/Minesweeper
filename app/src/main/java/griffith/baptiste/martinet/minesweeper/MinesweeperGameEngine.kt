@@ -114,7 +114,7 @@ class MinesweeperGameEngine(private var _boardSize: Int, private var _nbMines: I
         }
       }
     }
-    if (checkVictory())
+    if (isPlayerInitialized && checkVictory())
       finishGame(StatesEnum.WIN)
   }
 
